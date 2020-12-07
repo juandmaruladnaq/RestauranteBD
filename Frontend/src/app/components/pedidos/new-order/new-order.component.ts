@@ -1,4 +1,4 @@
-import { Cliente } from './../../../models/cliente';
+import { Cliente } from '../../../models/Cliente';
 import { Empleado } from './../../../models/Empleado';
 import { Usuario } from './../../../models/Usuario';
 import { Component, OnInit } from '@angular/core';
