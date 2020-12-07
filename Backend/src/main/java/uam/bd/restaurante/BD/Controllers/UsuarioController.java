@@ -107,16 +107,17 @@ public class UsuarioController
 	@PostMapping("/login")		
 	public JToken login(@RequestBody Usuario t) throws Exception
 	{
-		System.out.println("Userrrrrr:");
-		System.out.println("User T: "+t.getCedula());
+		System.out.println("Userrrrrr:");		
 		try 
 		{
 			Usuario user = usuarioDAO.getBy(t.getCedula());
+			System.out.println("User DAO ced: "+user.getCedula());
+			System.out.println("User DAO nom: "+user.getNombre());
 			System.out.println("Password: "+t.getPassword());
 			boolean match = bCryptPasswordEncoder.matches(t.getPassword(), user.getPassword());
 			if(match)
 			{
-				String token = JwtTokenService.generateToken(t);
+				String token = JwtTokenService.generateToken(user);
 				System.out.println("Token: "+token);
 				return new JToken(token);
 				//return token;
@@ -135,8 +136,8 @@ public class UsuarioController
 		}		
 	}
 	
-	@PostMapping("/getuser")		
-	public String getUser(HttpServletRequest request)
+	@GetMapping("/validate-token")		
+	public boolean validateToken(HttpServletRequest request)
 	{
 		String token = request.getHeader("Authorization");
 		System.out.println(token);
@@ -146,6 +147,46 @@ public class UsuarioController
 			Claims c = JwtTokenService.getClaimsFromToken(token);
 			System.out.println("Claims");
 			System.out.println(c);
+			return true;
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error, Exception ", e);
+		}		
+	}
+	
+	@GetMapping("/get-user")		
+	public Usuario getUserFromToken(HttpServletRequest request)
+	{
+		String token = request.getHeader("Authorization");
+		System.out.println(token);
+		try 
+		{
+			JwtTokenService.verifyToken(token);
+			Claims c = JwtTokenService.getClaimsFromToken(token);
+			//System.out.println("Claims Subject");
+			//System.out.println(c.getSubject());
+			return usuarioDAO.getBy(c.getSubject());		
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error, Exception ", e);
+		}		
+	}
+	
+	@PostMapping("/getuser")		
+	public String getUser(HttpServletRequest request)
+	{
+		String token = request.getHeader("Authorization");
+		System.out.println(token);
+		try 
+		{
+			JwtTokenService.verifyToken(token);
+			Claims c = JwtTokenService.getClaimsFromToken(token);
+			//System.out.println("Claims");
+			//System.out.println(c);
 			return c.getId();
 		} 
 		catch (Exception e) 

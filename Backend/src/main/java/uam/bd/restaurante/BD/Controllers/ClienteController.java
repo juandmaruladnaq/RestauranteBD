@@ -59,6 +59,22 @@ public class ClienteController
 		}		
 	}
 	
+	@PostMapping("/clientes/id")		
+	public Cliente getById(@RequestBody String id)
+	{		
+		Cliente cliente;
+		try 
+		{
+			cliente = clienteDAO.getBy(id);
+			return cliente;
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error, Exception ", e);
+		}		
+	}
+	
 	@DeleteMapping("/clientes")
 	public boolean deleteCliente(@RequestBody Cliente t)
 	{

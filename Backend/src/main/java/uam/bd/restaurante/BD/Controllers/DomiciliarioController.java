@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import uam.bd.restaurante.BD.DAO.DAO;
 import uam.bd.restaurante.BD.DAOmysql.DomiciliarioDAOImpl;
+import uam.bd.restaurante.BD.Model.Cliente;
 import uam.bd.restaurante.BD.Model.Domiciliario;
 import uam.bd.restaurante.BD.MysqlConnector.DBConnection;
 
@@ -55,6 +56,22 @@ public class DomiciliarioController
 		} 
 		catch (Exception e) 
 		{			
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error, Exception ", e);
+		}		
+	}
+	
+	@PostMapping("/domiciliarios/id")		
+	public Domiciliario getById(@RequestBody String id)
+	{		
+		Domiciliario domiciliario;
+		try 
+		{
+			domiciliario = domiciliarioDAO.getBy(id);
+			return domiciliario;
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error, Exception ", e);
 		}		
 	}

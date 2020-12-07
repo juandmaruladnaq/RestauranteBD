@@ -1,0 +1,60 @@
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Registrar Domiciliario
+            </div>
+            <div class="card-body">
+                <form [formGroup]="formDomicilio" (ngSubmit)="saveDomicilio(formDomicilio.getRawValue())">
+                    <div class="form-group">
+                        <label for="cedula" class="col-form-label">Cedula</label>
+                        <input type="text" class="form-control" id="cedula" formControlName="cedula" name="cedula">
+                    </div>  
+                    <div class="form-group">
+                        <label for="nombre" class="col-form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" formControlName="nombre" name="nombre">
+                    </div>  
+                    <div class="form-group">
+                        <label for="apellidos" class="col-form-label">Apellidos</label>
+                        <input type="text" class="form-control" id="apellidos" formControlName="apellidos" name="apellidos">
+                    </div>                      
+                    <div class="form-group">
+                        <label for="telefono" class="col-form-label">Telefono</label>
+                        <input type="text" class="form-control" id="telefono" formControlName="telefono" name="telefono">
+                    </div>  
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email</label>
+                        <input type="email" class="form-control" id="email" formControlName="email" name="email">
+                    </div>  
+                    <input type="submit" class="btn btn-primary" value="Save" [disabled]="!formCliente.valid">                  
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <h2 class="text-center">Lista De Domiciliarios</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="table-active">Cédula</th>
+                    <th class="table-active">Nombre</th>
+                    <th class="table-active">Apelidos</th>                    
+                    <th class="table-active">Telefono</th>
+                    <th class="table-active">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let cliente of clientes; index as i;" class="">
+                    <th scope="row">{{ domiciliario.cedula }}</th>
+                    <th scope="row">{{ domiciliario.nombre }}</th>
+                    <th scope="row">{{ domiciliario.apellidos }}</th>                   
+                    <th scope="row">{{ domiciliario.telefono }}</th>
+                    <th scope="row">{{ domiciliario.email }}</th>
+                </tr>                
+            </tbody>
+        </table>
+    </div>
+
+</div>
+

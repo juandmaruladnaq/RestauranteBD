@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import uam.bd.restaurante.BD.DAO.DAO;
 import uam.bd.restaurante.BD.Model.Cliente;
 
@@ -51,7 +54,7 @@ public class ClienteDAOImpl implements DAO<Cliente>
 		} 
 		else 
 		{
-			return null;
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Esta Cedula No existe");
 		}
 	}
 
@@ -109,10 +112,11 @@ public class ClienteDAOImpl implements DAO<Cliente>
                 resultSet.getString("cedula"),
                 resultSet.getString("nombre"),
                 resultSet.getString("apellidos"), 
-                resultSet.getString("direccion"),
                 resultSet.getString("email"),
+                resultSet.getString("telefono"),
                 resultSet.getBoolean("is_active"),
-                resultSet.getString("telefono")
+                resultSet.getString("direccion")            
+                
         );
 
         return cliente;
