@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
-import { Cliente } from './../../../models/Cliente';
+import { Cliente } from './../../../models/cliente';
 import { ClientesService } from './../../../services/clientes.service';
 
 

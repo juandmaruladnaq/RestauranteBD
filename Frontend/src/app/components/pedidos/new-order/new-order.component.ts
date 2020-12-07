@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Pedido } from 'src/app/models/Pedido';
+import { PedidoService } from './../../../services/pedido.service';
 
 @Component({
   selector: 'app-new-order',
@@ -7,32 +9,67 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./new-order.component.css']
 })
 export class NewOrderComponent implements OnInit 
-{
-  formPedido: FormGroup
+{  
+  myForm: FormGroup;
 
-  constructor() { }
-
-  ngOnInit(): void 
-  {
-    this.buildFormUsuario()
+  get productos(): FormArray {
+    return this.myForm.get("productos") as FormArray;
   }
 
-  private buildFormUsuario()
-  {
-    this.formPedido = new FormGroup({
-      cliente: new FormArray([
-        new FormControl('', [Validators.required])
-      ])      
+  constructor(
+    private fb: FormBuilder,
+    private pedidoService: PedidoService
+    ) { }
+
+  ngOnInit() {
+    this.myForm = new FormGroup({
+      cliente: new FormGroup({
+        cedula: new FormControl('')
+      }),
+      usuario: new FormGroup({
+        cedula: new FormControl('')
+      })
     })
+    this.myForm = this.fb.group({
+      cliente: this.fb.group({
+        cedula: [""]
+      }),
+      usuario: this.fb.group({
+        cedula: [""]
+      }),
+      productos: this.fb.array([])
+    });
   }
 
-  private builtForm() {
-    this.formPedido = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      telefonos: new FormArray([
-        new FormControl('', [Validators.required])
-      ])
+  
+  private buildProducto(): FormGroup {
+    return this.fb.group({
+      producto: this.fb.group({
+        codigo: [""]
+      }),
+      cantidad: [""],
+      valor: [""]
     });
+  }
+
+  addProducto() {
+    this.productos.push(this.buildProducto())
+  }
+
+  removeProducto(i: number) {
+    this.productos.removeAt(i);
+  }
+
+  save(pedido: Pedido)
+  {
+    this.pedidoService.save(pedido)
+                  .subscribe(
+                    res => {
+                      console.log(res)
+                      this.myForm.reset()                      
+                    },
+                    error => console.log(error)
+                  )
   }
 
 }
