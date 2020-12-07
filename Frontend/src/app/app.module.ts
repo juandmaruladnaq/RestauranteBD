@@ -12,6 +12,8 @@ import { PanelUsuariosComponent } from './components/usuarios/panel-usuarios/pan
 import { PanelProductosComponent } from './components/productos/panel-productos/panel-productos.component';
 import { NavigationMenuComponent } from './components/navbar/navigation-menu/navigation-menu.component';
 import { LoginComponent } from './components/usuarios/login/login.component';
+import { EnviosComponent } from './components/envios/envios.component';
+import { DomiciliariosComponent } from './components/domiciliarios/domiciliarios.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { LoginComponent } from './components/usuarios/login/login.component';
     PanelUsuariosComponent,
     PanelProductosComponent,
     NavigationMenuComponent,
-    LoginComponent
+    LoginComponent,
+    EnviosComponent,
+    DomiciliariosComponent
   ],
   imports: [
     BrowserModule,

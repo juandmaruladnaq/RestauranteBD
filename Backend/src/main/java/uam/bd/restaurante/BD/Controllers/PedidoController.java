@@ -3,6 +3,8 @@ package uam.bd.restaurante.BD.Controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,11 +15,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.jsonwebtoken.Claims;
+import uam.bd.restaurante.BD.JwtTokenService;
+import uam.bd.restaurante.BD.DAO.DAO;
 import uam.bd.restaurante.BD.DAO.DAO_Foreign;
 import uam.bd.restaurante.BD.DAOmysql.LineaPedidoDAOImpl;
 import uam.bd.restaurante.BD.DAOmysql.PedidoDAOImpl;
+import uam.bd.restaurante.BD.DAOmysql.UsuarioDAOImpl;
 import uam.bd.restaurante.BD.Model.LineaPedido;
 import uam.bd.restaurante.BD.Model.Pedido;
+import uam.bd.restaurante.BD.Model.Usuario;
 import uam.bd.restaurante.BD.MysqlConnector.DBConnection;
 
 @RestController
@@ -27,18 +34,27 @@ public class PedidoController
 	
 	private DAO_Foreign<LineaPedido> lineaPedidoDAO;
 	
+	private DAO<Usuario> usuarioDAO;
+	
 	public PedidoController()
 	{
 		pedidoDAO = new PedidoDAOImpl(DBConnection.getConnection());
-		lineaPedidoDAO = new LineaPedidoDAOImpl(DBConnection.getConnection());		
+		lineaPedidoDAO = new LineaPedidoDAOImpl(DBConnection.getConnection());	
+		usuarioDAO = new UsuarioDAOImpl(DBConnection.getConnection());
 	}	
 	
 	@PostMapping(path="/pedido")
-	public boolean savePedido(@RequestBody Pedido t) 
+	public boolean savePedido(HttpServletRequest request, @RequestBody Pedido t) 
 	{			
 		try 
 		{
 			DBConnection.disableAutoCommit();
+			String token = request.getHeader("Authorization");
+			System.out.println(token);
+			JwtTokenService.verifyToken(token);
+			Claims c = JwtTokenService.getClaimsFromToken(token);			
+			Usuario user = usuarioDAO.getBy(c.getSubject());
+			t.setEmpleado(user);				
 			int idPedido = pedidoDAO.save(t);
 			ArrayList<LineaPedido> lineas = t.getProductos();
 			int affectedRows = 0;			

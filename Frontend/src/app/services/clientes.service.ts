@@ -18,4 +18,10 @@ export class ClientesService {
   {
     return this.http.get<Cliente[]>(this.URL_API)
   }
+
+  getById(id: String)
+  {
+    return this.http.post<Cliente>(this.URL_API+"/id", id)
+  }
+
 }

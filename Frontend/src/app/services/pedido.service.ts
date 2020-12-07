@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Pedido } from '../models/Pedido';
 
@@ -14,6 +14,10 @@ export class PedidoService {
 
   save(pedido: Pedido)
   {
-    return this.http.post<String>(this.URL_API, pedido)    
+    let header = new HttpHeaders().set(
+      "Authorization",
+       localStorage.getItem("token")
+    ); 
+    return this.http.post<String>(this.URL_API, pedido, {headers:header})    
   }
 }
