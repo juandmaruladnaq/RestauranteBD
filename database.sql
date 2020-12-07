@@ -1,0 +1,115 @@
+CREATE DATABASE restaurante;
+
+USE restaurante;
+
+CREATE TABLE empleado(
+cedula VARCHAR(10),
+nombre VARCHAR(50) NOT NULL,
+apellidos VARCHAR(50) NOT NULL,
+telefono VARCHAR(15) NOT NULL,
+email VARCHAR(100) NOT NULL,
+is_active BOOLEAN NOT NULL DEFAULT TRUE,
+UNIQUE (email),
+PRIMARY KEY (cedula)
+);
+
+CREATE TABLE usuario(
+id_empleado VARCHAR(10),
+password VARCHAR(255) NOT NULL,
+is_active BOOLEAN NOT NULL DEFAULT TRUE,
+PRIMARY KEY (id_empleado),
+FOREIGN KEY (id_empleado)
+REFERENCES empleado(cedula)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE cliente(
+cedula VARCHAR(10),
+nombre VARCHAR(50) NOT NULL,
+apellidos VARCHAR(50) NOT NULL,
+direccion VARCHAR(100) NOT NULL,
+telefono VARCHAR(12) NOT NULL,
+email VARCHAR(100),
+is_active BOOLEAN NOT NULL DEFAULT TRUE,
+PRIMARY KEY (cedula)
+);
+
+CREATE TABLE estado_pedido(
+numero INT UNSIGNED AUTO_INCREMENT,
+nombre VARCHAR(30) NOT NULL,
+UNIQUE (nombre),
+PRIMARY KEY(numero)
+);
+
+CREATE TABLE domiciliario(
+cedula VARCHAR(10),
+nombre VARCHAR(50) NOT NULL,
+apellidos VARCHAR(50) NOT NULL,
+telefono VARCHAR(12) NOT NULL,
+email VARCHAR(100) NOT NULL,
+is_active BOOLEAN NOT NULL DEFAULT TRUE,
+UNIQUE (email),
+PRIMARY KEY (cedula)
+);
+
+CREATE TABLE envio(
+numero INT UNSIGNED AUTO_INCREMENT,
+fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+domiciliario VARCHAR(10),
+PRIMARY KEY (numero),
+FOREIGN KEY (domiciliario)
+REFERENCES domiciliario(cedula)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+
+CREATE TABLE pedido(
+numero INT UNSIGNED AUTO_INCREMENT,
+fecha TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+cliente VARCHAR(10) NOT NULL,
+usuario VARCHAR(10) NOT NULL,
+estado INT UNSIGNED NOT NULL,
+id_envio INT UNSIGNED,
+PRIMARY KEY (numero),
+FOREIGN KEY (cliente)
+REFERENCES cliente(cedula)
+ON DELETE NO ACTION
+ON UPDATE CASCADE,
+FOREIGN KEY (usuario)
+REFERENCES usuario(id_empleado)
+ON DELETE NO ACTION
+ON UPDATE CASCADE,
+FOREIGN KEY (estado)
+REFERENCES estado_pedido(numero)
+ON DELETE NO ACTION
+ON UPDATE CASCADE,
+FOREIGN KEY (id_envio)
+REFERENCES envio(numero)
+ON DELETE SET NULL
+ON UPDATE CASCADE
+);
+
+CREATE TABLE producto(
+codigo VARCHAR(20),
+nombre VARCHAR(50) NOT NULL,
+descripcion TEXT,
+valor FLOAT,
+is_active BOOLEAN NOT NULL DEFAULT TRUE,
+PRIMARY KEY (codigo)
+);
+
+CREATE TABLE productos_pedido(
+id_pedido INT UNSIGNED,
+id_producto VARCHAR(20),
+cantidad INT NOT NULL,
+valor_un FLOAT NOT NULL,
+PRIMARY KEY (id_pedido, id_producto),
+FOREIGN KEY (id_producto)
+REFERENCES producto(codigo)
+ON DELETE NO ACTION
+ON UPDATE CASCADE
+);
+
+
+

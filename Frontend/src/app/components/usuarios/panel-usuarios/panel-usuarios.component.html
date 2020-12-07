@@ -1,0 +1,54 @@
+<div class="row mt-4">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Registrar Usuario
+            </div>
+            <div class="card-body">
+                <div *ngIf="msg" class="alert alert-primary" role="alert">
+                    {{ msg }}
+                </div>
+                <form [formGroup]="formUsuario" (ngSubmit)="saveUsuario(formUsuario.getRawValue())">
+                    <div class="form-group">
+                        <label for="cedula" class="col-form-label">Cedula</label>
+                        <input type="text" class="form-control" id="cedula" formControlName="cedula" name="cedula">
+                    </div>                      
+                    <div class="form-group">
+                        <label for="telefono" class="col-form-label">Password</label>
+                        <input type="password" class="form-control" id="password" formControlName="password" name="password">
+                    </div> 
+                    <div class="form-group">
+                        <label for="telefono" class="col-form-label">Repetir Password</label>
+                        <input type="password" class="form-control" id="password" formControlName="password" name="password">
+                    </div>                      
+                    <input type="submit" class="btn btn-primary" value="Save" [disabled]="!formUsuario.valid">                  
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <h2 class="text-center">Lista De Usuarios</h2>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="table-active">Cédula</th>
+                    <th class="table-active">Nombre</th>
+                    <th class="table-active">Apelidos</th>
+                    <th class="table-active">Telefono</th>
+                    <th class="table-active">Email</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let usuario of usuarios; index as i;" class="">
+                    <th scope="row">{{ usuario.cedula }}</th>
+                    <th scope="row">{{ usuario.nombre }}</th>
+                    <th scope="row">{{ usuario.apellidos }}</th>
+                    <th scope="row">{{ usuario.telefono }}</th>
+                    <th scope="row">{{ usuario.email }}</th>
+                </tr>                
+            </tbody>
+        </table>
+    </div>
+
+</div>
