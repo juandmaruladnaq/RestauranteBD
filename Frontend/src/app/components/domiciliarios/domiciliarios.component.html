@@ -26,7 +26,7 @@
                         <label for="email" class="col-form-label">Email</label>
                         <input type="email" class="form-control" id="email" formControlName="email" name="email">
                     </div>  
-                    <input type="submit" class="btn btn-primary" value="Save" [disabled]="!formCliente.valid">                  
+                    <input type="submit" class="btn btn-primary" value="Save" [disabled]="!formDomicilio.valid">                  
                 </form>
             </div>
         </div>
@@ -45,7 +45,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let cliente of clientes; index as i;" class="">
+                <tr *ngFor="let domiciliario of domicilios; index as i;" class="">
                     <th scope="row">{{ domiciliario.cedula }}</th>
                     <th scope="row">{{ domiciliario.nombre }}</th>
                     <th scope="row">{{ domiciliario.apellidos }}</th>                   
