@@ -29,6 +29,11 @@ public class Pedido
 		this.productos = new ArrayList<LineaPedido>();
 	}	
 	
+	public Pedido(int numero)
+	{
+		this.numero = numero;
+	}
+	
 	public int getNumero() 
 	{
 		return numero;

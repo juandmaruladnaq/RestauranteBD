@@ -124,7 +124,7 @@ public class PedidoDAOImpl implements DAO_Foreign<Pedido>
 	{
 		List<Pedido> elements = new ArrayList<>();
         
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM pedido WHERE usuario = ?");
+        PreparedStatement statement = connection.prepareStatement("SELECT * FROM pedido WHERE id_envio = ?");
         statement.setString(1, id);	        
         ResultSet resultSet = statement.executeQuery();
         

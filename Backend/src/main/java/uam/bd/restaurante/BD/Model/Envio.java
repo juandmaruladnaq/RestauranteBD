@@ -1,6 +1,7 @@
 package uam.bd.restaurante.BD.Model;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class Envio 
 {
@@ -9,13 +10,25 @@ public class Envio
 	private Timestamp fecha;
 	
 	private Domiciliario domiciliario;
+	
+	private ArrayList<Pedido> pedidos;   
 
 	public Envio(int numero, Timestamp fecha, Domiciliario domiciliario) 
-	{
-		super();
+	{		
 		this.numero = numero;
 		this.fecha = fecha;
 		this.domiciliario = domiciliario;
+		this.pedidos = new ArrayList<Pedido>();
+	}
+	
+	public Envio(Domiciliario domiciliario)
+	{		
+		this.domiciliario = domiciliario;
+	}
+	
+	public Envio()
+	{
+		
 	}
 
 	public int getNumero() 
@@ -46,5 +59,27 @@ public class Envio
 	public void setDomiciliario(Domiciliario domiciliario) 
 	{
 		this.domiciliario = domiciliario;
+	}
+
+	public ArrayList<Pedido> getPedidos() 
+	{
+		return pedidos;
+	}
+
+	public void setPedidos(ArrayList<Pedido> pedidos) 
+	{
+		this.pedidos = pedidos;
 	}	
+	
+	public void addPedido(int numero)
+	{
+		this.pedidos.add(new Pedido(numero));
+	}
+	
+	public void addPedido(Pedido p)
+	{
+		this.pedidos.add(p);
+	}
+	
+	
 }

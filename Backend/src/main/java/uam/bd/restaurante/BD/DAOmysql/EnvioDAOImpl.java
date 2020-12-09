@@ -3,23 +3,26 @@ package uam.bd.restaurante.BD.DAOmysql;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import uam.bd.restaurante.BD.DAO.DAO_Foreign;
 import uam.bd.restaurante.BD.Model.Domiciliario;
 import uam.bd.restaurante.BD.Model.Envio;
+import uam.bd.restaurante.BD.Model.Pedido;
 
 public class EnvioDAOImpl implements DAO_Foreign<Envio> 
 {
 	private final Connection connection;
 	
-	private DomiciliarioDAOImpl domiciliarioDAO;
+	private DomiciliarioDAOImpl domiciliarioDAO;	
+	
 	
 	public EnvioDAOImpl(Connection connection)
 	{
 		this.connection = connection;
-		this.domiciliarioDAO = new DomiciliarioDAOImpl(connection);
+		this.domiciliarioDAO = new DomiciliarioDAOImpl(connection);		
 	}
 
 	@Override
@@ -27,7 +30,7 @@ public class EnvioDAOImpl implements DAO_Foreign<Envio>
 	{
 		List<Envio> elements = new ArrayList<>();
         
-        PreparedStatement statement = connection.prepareStatement("SELECT * FROM envio");
+        PreparedStatement statement = connection.prepareStatement("SELECT e.*, p.numero idp FROM envio e INNER JOIN pedido p ON e.numero = p.id_envio");
         ResultSet resultSet = statement.executeQuery();
         
         while(resultSet.next())
@@ -61,14 +64,22 @@ public class EnvioDAOImpl implements DAO_Foreign<Envio>
 	public int save(Envio t) throws Exception 
 	{
 		PreparedStatement statement = connection.prepareStatement("INSERT INTO envio( domiciliario)"
-																+ " VALUES (?)");
+																+ " VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 		
 				
 		statement.setString(1, t.getDomiciliario().getCedula());
 
 		int affectedRows = statement.executeUpdate();
+		
+		if(affectedRows == 1)
+		{
+			ResultSet generatedKeys = statement.getGeneratedKeys();
+			generatedKeys.next();
+			t.setNumero(generatedKeys.getInt(1));
+		}		
 
-		return affectedRows;
+		return t.getNumero();
+		
 	}
 
 	@Override
@@ -122,6 +133,13 @@ public class EnvioDAOImpl implements DAO_Foreign<Envio>
 				resultSet.getTimestamp("fecha"),
 				domiciliario				
 		);
+		
+		envio.addPedido(resultSet.getInt("idp"));
+		
+		while(resultSet.next())
+		{
+			envio.addPedido(resultSet.getInt("idp"));
+		}		
 
 		return envio;
 	}	
