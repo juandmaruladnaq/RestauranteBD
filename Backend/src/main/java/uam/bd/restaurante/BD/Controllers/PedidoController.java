@@ -22,6 +22,8 @@ import uam.bd.restaurante.BD.DAO.DAO_Foreign;
 import uam.bd.restaurante.BD.DAOmysql.LineaPedidoDAOImpl;
 import uam.bd.restaurante.BD.DAOmysql.PedidoDAOImpl;
 import uam.bd.restaurante.BD.DAOmysql.UsuarioDAOImpl;
+import uam.bd.restaurante.BD.Model.Domiciliario;
+import uam.bd.restaurante.BD.Model.Estado;
 import uam.bd.restaurante.BD.Model.LineaPedido;
 import uam.bd.restaurante.BD.Model.Pedido;
 import uam.bd.restaurante.BD.Model.Usuario;
@@ -123,4 +125,5 @@ public class PedidoController
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error, Exception ", e);
 		}
 	}
+	
 }

@@ -105,6 +105,8 @@ public class PedidoDAOImpl implements DAO_Foreign<Pedido>
 		statement.setInt(6, t.getNumero());
 		return statement.executeUpdate();
 	}
+	
+
 
 	@Override
 	public int delete(Pedido t) throws Exception 

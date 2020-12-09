@@ -60,11 +60,11 @@ public class EnvioDAOImpl implements DAO_Foreign<Envio>
 	@Override
 	public int save(Envio t) throws Exception 
 	{
-		PreparedStatement statement = connection.prepareStatement("INSERT INTO envio(fecha, domiciliario)"
-																+ " VALUES (?, ?)");
+		PreparedStatement statement = connection.prepareStatement("INSERT INTO envio( domiciliario)"
+																+ " VALUES (?)");
 		
-		statement.setTimestamp(1, t.getFecha());		
-		statement.setString(2, t.getDomiciliario().getCedula());
+				
+		statement.setString(1, t.getDomiciliario().getCedula());
 
 		int affectedRows = statement.executeUpdate();
 

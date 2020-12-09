@@ -19,8 +19,8 @@ public class DBConnection
 		{
 			String url = "jdbc:mysql://localhost/restaurante?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";	        
 	        Properties properties = new Properties();
-	        properties.put("user", "santi");
-	        properties.put("password", "1926");
+	        properties.put("user", "root");
+	        properties.put("password", "8774677jD1");
 			try 
 			{				
 				conn = DriverManager.getConnection(url, properties);

@@ -1,1 +1,31 @@
-<p>envios works!</p>
+<div [formGroup]="myForm" (ngSubmit)="save(myForm.getRawValue())" class=" pt-5">   
+    <div formGroupName="domiciliario" class="form-group">
+        <label for="author">domiciliario</label>
+        <input type="text" class="form-control" placeholder="Cedula Domiciliario" formControlName="cedula" #cedula />
+    </div>  
+    <div class="form-group">
+        <button type="button" class="btn btn-info" (click)="buscarDomiciliario(cedula.value)">Buscar</button>
+    </div>    
+<div>
+    <button type="button" (click)="save(myForm.getRawValue())" class="btn btn-primary">Realizar Envio</button>
+</div>
+<div class="col">
+    <h2 class="text-center">Lista De Envios</h2>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class="table-active">Número</th>
+                <th class="table-active"> Fecha</th>
+                <th class="table-active">Domiciliario</th>                    
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let envio of envios; index as i;" class="">
+                <th scope="row">{{ envio.numero }}</th>
+                <th scope="row">{{ envio.fecha }}</th>
+                <th scope="row">{{ envio.domiciliario.cedula }}</th>                   
+            </tr>                
+        </tbody>
+    </table>
+</div>
+</div>

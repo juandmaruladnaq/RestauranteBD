@@ -12,19 +12,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import uam.bd.restaurante.BD.DAO.DAO;
 import uam.bd.restaurante.BD.DAO.DAO_Foreign;
+import uam.bd.restaurante.BD.DAOmysql.DomiciliarioDAOImpl;
 import uam.bd.restaurante.BD.DAOmysql.EnvioDAOImpl;
+import uam.bd.restaurante.BD.DAOmysql.UsuarioDAOImpl;
+import uam.bd.restaurante.BD.Model.Domiciliario;
 import uam.bd.restaurante.BD.Model.Envio;
+import uam.bd.restaurante.BD.Model.Usuario;
 import uam.bd.restaurante.BD.MysqlConnector.DBConnection;
 
 @RestController
 public class EnvioController 
 {
 	private DAO_Foreign<Envio> envioDAO;
+	private DAO<Domiciliario> domiciliarioDAO;
 	
 	public EnvioController()
 	{
 		envioDAO = new EnvioDAOImpl(DBConnection.getConnection());
+		domiciliarioDAO = new DomiciliarioDAOImpl(DBConnection.getConnection());
 	}
 	
 	@PostMapping(path="/envios")
@@ -32,14 +39,24 @@ public class EnvioController
 	{			
 		try 
 		{
+			DBConnection.disableAutoCommit();
+			String id=t.getDomiciliario().getCedula();
+			Domiciliario domiciliario = domiciliarioDAO.getBy(id);
+			t.setDomiciliario(domiciliario);
+			DBConnection.commit();
 			return envioDAO.save(t) > 0;
+			
 		} 
 		catch (DataIntegrityViolationException e) 
 		{
+			e.printStackTrace();
+			DBConnection.rollback();
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Este Envio Ya Existe", e);
 		} 
 		catch (Exception e) 
 		{
+			e.printStackTrace();
+			DBConnection.rollback();
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error, Exception ", e);
 		}
 	}	
